@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+<h3>All Categories</h3>
+
+{% if category_record %}
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">Category ID</th>
+        <th scope="col">Category Name</th>
+        <th scope="col">Category Type</th>
+        <th scope="col" colspan="2"><center>Action</center></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for cat in category_record %}
+      <tr>
+        <td>{{ cat.category_id }}</td>
+        <td>{{ cat.category_name }}</td>
+        <td>{{ cat.category_type }}</td>
+        <td><a href="{% url 'update_category' cat.pk %}" 
+             onclick="return confirm('Are you sure you want to update this category?');">
+             Update
+          </a></td>
+        <td><a href="{% url 'delete_category' cat.pk %}" 
+             onclick="return confirm('Are you sure you want to delete this category?');">
+             Delete
+          </a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No categories found.</p>
+{% endif %}
+{% endif %}
+{% endblock %}
