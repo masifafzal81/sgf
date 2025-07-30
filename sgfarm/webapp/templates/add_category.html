@@ -1,5 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h3>Add Category Form</h3>
+<h1>Add Category</h1>
+
+<form method="POST" action="">
+        {% csrf_token %}
+
+        {% if form.errors %}
+        
+        <div class="alert alert-danger" role="alert">
+            Invalid Form
+            {% for field in form %}
+            {% if field.errors %}
+            {{field.label_tags}}:{{field.errors}}
+            {% endif %}
+            {% endfor %}
+        </div>
+        
+        {% endif %}
+
+        {{ form.as_p }}
+  
+      <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
 {% endblock %}
