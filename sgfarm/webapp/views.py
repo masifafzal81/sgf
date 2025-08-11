@@ -4,9 +4,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from . models import Category, Subcategory, Transaction
 from . forms import AddCategoryForm, AddSubcategoryForm
-from django.db.models.functions import Coalesce
 from django.db.models import F, Value
 from django.db.models import FloatField
+from django.db.models import Sum
+from django.db.models.functions import Coalesce
+from django.db import connection
 
 
 def home(request):
@@ -178,10 +180,83 @@ def view_products(request):
     
     if request.user.is_authenticated:
         
+        
+        
         income_products = Transaction.objects.filter(category__category_type=1).order_by('category_id__category_name')
         expense_products = Transaction.objects.filter(category__category_type=2).order_by('category_id__category_name')
         
-        return render(request, 'view_products.html',{'income_products':income_products,'expense_products':expense_products})
+        totals = Transaction.objects.filter(
+    category__category_type="1"
+).aggregate(
+        total_jul_1_a=Sum('jul_1_a'),
+        total_jul_2_a=Sum('jul_2_a'),
+        total_aug_1_a=Sum('aug_1_a'),
+        total_aug_2_a=Sum('aug_2_a'),
+        total_sep_1_a=Sum('sep_1_a'),
+        total_sep_2_a=Sum('sep_2_a'),
+        total_oct_1_a=Sum('oct_1_a'),
+        total_oct_2_a=Sum('oct_2_a'),
+        total_nov_1_a=Sum('nov_1_a'),
+        total_nov_2_a=Sum('nov_2_a'),
+        total_dec_1_a=Sum('dec_1_a'),
+        total_dec_2_a=Sum('dec_2_a'),
+        total_jan_1_a=Sum('jan_1_a'),
+        total_jan_2_a=Sum('jan_2_a'),
+        total_feb_1_a=Sum('feb_1_a'),
+        total_feb_2_a=Sum('feb_2_a'),
+        total_mar_1_a=Sum('mar_1_a'),
+        total_mar_2_a=Sum('mar_2_a'),
+        total_apr_1_a=Sum('apr_1_a'),
+        total_apr_2_a=Sum('apr_2_a'),
+        total_may_1_a=Sum('may_1_a'),
+        total_may_2_a=Sum('may_2_a'),
+        total_jun_1_a=Sum('jun_1_a'),
+        total_jun_2_a=Sum('jun_2_a'),
+        total=Sum('total'),
+    )
+
+    # Replace None with 0
+    for key, value in totals.items():
+        totals[key] = value or 0
+        
+        totals2 = Transaction.objects.filter(
+    category__category_type="2"
+).aggregate(
+        total_jul_1_a=Sum('jul_1_a'),
+        total_jul_2_a=Sum('jul_2_a'),
+        total_aug_1_a=Sum('aug_1_a'),
+        total_aug_2_a=Sum('aug_2_a'),
+        total_sep_1_a=Sum('sep_1_a'),
+        total_sep_2_a=Sum('sep_2_a'),
+        total_oct_1_a=Sum('oct_1_a'),
+        total_oct_2_a=Sum('oct_2_a'),
+        total_nov_1_a=Sum('nov_1_a'),
+        total_nov_2_a=Sum('nov_2_a'),
+        total_dec_1_a=Sum('dec_1_a'),
+        total_dec_2_a=Sum('dec_2_a'),
+        total_jan_1_a=Sum('jan_1_a'),
+        total_jan_2_a=Sum('jan_2_a'),
+        total_feb_1_a=Sum('feb_1_a'),
+        total_feb_2_a=Sum('feb_2_a'),
+        total_mar_1_a=Sum('mar_1_a'),
+        total_mar_2_a=Sum('mar_2_a'),
+        total_apr_1_a=Sum('apr_1_a'),
+        total_apr_2_a=Sum('apr_2_a'),
+        total_may_1_a=Sum('may_1_a'),
+        total_may_2_a=Sum('may_2_a'),
+        total_jun_1_a=Sum('jun_1_a'),
+        total_jun_2_a=Sum('jun_2_a'),
+        total=Sum('total'),
+    )
+
+    # Replace None with 0
+    for key, value in totals2.items():
+        totals2[key] = value or 0
+        
+        
+        return render(request, 'view_products.html',{'income_products':income_products,
+                                                     'expense_products':expense_products,
+                                                     'totals':totals,'totals2':totals2})
     else:
         messages.success(request,'You have to login.....')
         return redirect('home')
@@ -224,9 +299,20 @@ def make_transaction(request, pk):
         setattr(transaction, qty_field, qty)
         setattr(transaction, rate_field, rate)
         setattr(transaction, amount_field, amount)
-
+  
         transaction.save()
 
         messages.success(request, 'Transaction updated successfully.')
 
     return render(request, 'make_transaction.html', {'transaction': transaction})
+
+def delete_transaction(request, pk):
+    if request.user.is_authenticated:
+        
+        transaction_delete = get_object_or_404(Transaction, pk=pk)
+        transaction_delete.delete()
+        messages.success(request, "Record deleted successfully.")
+        return redirect('view_products')
+    else:
+        messages.success(request,'You have to login.....')
+        return redirect('home')
