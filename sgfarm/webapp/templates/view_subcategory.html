@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+<h3>All SubCategories</h3>
+
+{% if subcategory_record %}
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">SubCategory ID</th>
+        <th scope="col">SubCategory Name</th>
+        <th scope="col">SubCategory Type</th>
+        <th scope="col">SubCategory Description</th>
+        <th scope="col" colspan="2"><center>Action</center></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for subcat in subcategory_record %}
+      <tr>
+        <td>{{ subcat.subcategory_id }}</td>
+        <td>{{ subcat.subcategory_name }}</td>
+        <td>{{ subcat.category }}</td>
+        <td>{{ subcat.subcategory_desc }}</td>
+        <td><a href="{% url 'update_subcategory' subcat.pk %}" 
+             onclick="return confirm('Are you sure you want to update this category?');">
+             Update
+          </a></td>
+        <td><a href="{% url 'delete_subcategory' subcat.pk %}" 
+             onclick="return confirm('Are you sure you want to delete this category?');">
+             Delete
+          </a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No subcategories found.</p>
+{% endif %}
+{% endif %}
+{% endblock %}

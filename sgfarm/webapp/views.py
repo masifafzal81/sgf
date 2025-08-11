@@ -1,8 +1,13 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from . models import Category
-from . forms import AddCategoryForm
+from . models import Category, Subcategory, Transaction
+from . forms import AddCategoryForm, AddSubcategoryForm
+from django.db.models.functions import Coalesce
+from django.db.models import F, Value
+from django.db.models import FloatField
+
 
 def home(request):
     
@@ -34,6 +39,9 @@ def logout_view(request):
     messages.success(request, 'You are successfully logged out.')
     return redirect('home')
 
+
+# Category Methods
+
 def add_category(request):
     form = AddCategoryForm(request.POST or None) 
     if request.user.is_authenticated:
@@ -49,7 +57,7 @@ def add_category(request):
 
 def view_category(request):
     if request.user.is_authenticated:
-        # Look up the specific client data
+        
         category_record = Category.objects.all()
         return render(request, 'view_category.html',{'category_record':category_record})
     else:
@@ -58,7 +66,7 @@ def view_category(request):
 
 def delete_category(request, pk):
     if request.user.is_authenticated:
-        # Look up the specific client data
+        
         category_delete = get_object_or_404(Category, pk=pk)
         category_delete.delete()
         messages.success(request, "Category deleted successfully.")
@@ -82,4 +90,143 @@ def update_category(request, pk):
     else:
         messages.warning(request, 'You have to login.')
         return redirect('home')
+    
+    # SubCategory Methods
 
+def add_subcategory(request):
+    form = AddSubcategoryForm(request.POST or None) 
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            if form.is_valid():
+                add_subcategory = form.save()
+                messages.success(request,'Subcategory added successfully.')
+                return redirect('view_subcategory')
+        return render(request,'add_subcategory.html', {'form':form})
+    else:
+        messages.success(request, 'You have to login to add subcategories.')
+        return redirect('home')
+
+def view_subcategory(request):
+    if request.user.is_authenticated:
+
+        subcategory_record = Subcategory.objects.all()
+        return render(request, 'view_subcategory.html',{'subcategory_record':subcategory_record})
+    else:
+        messages.success(request,'You have to login.....')
+        return redirect('home')
+
+def delete_subcategory(request, pk):
+    if request.user.is_authenticated:
+        
+        subcategory_delete = get_object_or_404(Subcategory, pk=pk)
+        subcategory_delete.delete()
+        messages.success(request, "Subcategory deleted successfully.")
+        return redirect('view_subcategory')
+    else:
+        messages.success(request,'You have to login.....')
+        return redirect('home')
+
+def update_subcategory(request, pk):
+    if request.user.is_authenticated:
+        subcategory_instance = get_object_or_404(Subcategory, pk=pk)
+        form = AddSubcategoryForm(request.POST or None, instance=subcategory_instance)
+
+        if request.method == "POST":
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Sub-Category updated successfully.")
+                return redirect('view_subcategory')
+
+        return render(request, 'update_subcategory.html', {'form': form})
+    else:
+        messages.warning(request, 'You have to login.')
+        return redirect('home')
+
+#  Transaction Methods
+
+def add_products(request):
+    
+    if request.user.is_authenticated:
+        categories = Category.objects.all()
+        return render(request, 'add_products.html',{'categories':categories})
+
+def load_subcategories(request):
+    category_id = request.GET.get('category_id')
+    subcategories = Subcategory.objects.filter(category_id=category_id).values('subcategory_id', 'subcategory_name')
+    return JsonResponse(list(subcategories), safe=False)
+
+def add_row(request):
+    if request.method == "POST":
+        category_id = request.POST.get("category")
+        subcategory_id = request.POST.get("subcategory")
+        year = request.POST.get("year")
+
+        # Save to database
+        Transaction.objects.create(
+            category_id=category_id,
+            subcategory_id=subcategory_id,
+            year=year
+        )
+
+        messages.success(request, "Data saved successfully!")
+        return redirect('view_products')  # redirect to your desired page
+    else:
+        messages.warning(request, 'You have to login.')
+        return redirect('home')
+
+def view_products(request):
+    
+    if request.user.is_authenticated:
+        
+        income_products = Transaction.objects.filter(category__category_type=1).order_by('category_id__category_name')
+        expense_products = Transaction.objects.filter(category__category_type=2).order_by('category_id__category_name')
+        
+        return render(request, 'view_products.html',{'income_products':income_products,'expense_products':expense_products})
+    else:
+        messages.success(request,'You have to login.....')
+        return redirect('home')
+
+
+
+def make_transaction(request, pk):
+    transaction = get_object_or_404(Transaction.objects.select_related('subcategory'), pk=pk)
+
+    if not request.user.is_authenticated:
+        messages.success(request, 'You have to login.....')
+        return redirect('home')
+
+    if request.method == 'POST':
+        selected_month = request.POST.get('month')
+        qty = request.POST.get('qty')
+        rate = request.POST.get('rate')
+
+        if not selected_month or not qty or not rate:
+            return render(request, 'make_transaction.html', {
+                'transaction': transaction,
+                'error': 'Missing month, qty, or rate'
+            })
+
+        try:
+            qty = float(qty)
+            rate = float(rate)
+        except (TypeError, ValueError):
+            return render(request, 'make_transaction.html', {
+                'transaction': transaction,
+                'error': 'Invalid quantity or rate'
+            })
+
+        amount = qty * rate
+
+        qty_field = f"{selected_month}_q"
+        rate_field = f"{selected_month}_r"
+        amount_field = f"{selected_month}_a"
+
+        setattr(transaction, qty_field, qty)
+        setattr(transaction, rate_field, rate)
+        setattr(transaction, amount_field, amount)
+
+        transaction.save()
+
+        messages.success(request, 'Transaction updated successfully.')
+
+    return render(request, 'make_transaction.html', {'transaction': transaction})

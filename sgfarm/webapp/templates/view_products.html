@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .custom-table {
+        position: absolute;
+        top: 30;
+        left: 0;
+        margin-top: 40px;
+        border-collapse: collapse;
+        background-color: #fff9e6;
+    }
+    .custom-table th, .custom-table td {
+        white-space: nowrap;
+        border: 2px solid #d4a373;
+        padding: 10px;
+    }
+
+.custom-container{
+position: absolute;
+        top: 30;
+        left: 0;
+        margin: 0;
+        font-size: 24px;
+        font-weight: bold;
+
+}
+
+</style>
+
+
+
+{% if user.is_authenticated %}
+
+
+<div class="mycontainer">
+<div class="custom-container">
+    Income:
+</div>
+{% if income_products %}
+<table class="custom-table">
+    <thead> 
+    <tr>
+        <th>Product Name</th>
+        <th>Product Description</th>
+        <th>Jul-1</th>
+        <th>Jul-2</th>
+        <th>Aug-1</th>
+        <th>Aug-2</th>
+        <th>Sep-1</th>
+        <th>Sep-2</th>
+        <th>Oct-1</th>
+        <th>Oct-2</th>
+        <th>Nov-1</th>
+        <th>Nov-2</th>
+        <th>Dec-1</th>
+        <th>Dec-2</th>
+        <th>Jan-1</th>
+        <th>Jan-2</th>
+        <th>Feb-1</th>
+        <th>Feb-2</th>
+        <th>Mar-1</th>
+        <th>Mar-2</th>
+        <th>Apr-1</th>
+        <th>Apr-2</th>
+        <th>May-1</th>
+        <th>May-2</th>
+        <th>Jun-1</th>
+        <th>Jun-2</th>
+        <th>Total</th>
+        </tr>
+    
+    </thead>
+    <tbody>
+      {% for pro in income_products %}
+      <tr>
+        <td><a href="{% url 'make_transaction' pro.pk %}">{{ pro.subcategory.subcategory_name }}</a></td>
+        <td>{{ pro.subcategory_desc }}</td>
+        <td>{{ pro.jul_1_a }}</td>
+        <td>{{ pro.jul_2_a }}</td>
+        <td>{{ pro.aug_1_a }}</td>
+        <td>{{ pro.aug_2_a }}</td>
+        <td>{{ pro.sep_1_a }}</td>
+        <td>{{ pro.sep_2_a }}</td>
+        <td>{{ pro.oct_1_a }}</td>
+        <td>{{ pro.oct_2_a }}</td>
+        <td>{{ pro.nov_1_a }}</td>
+        <td>{{ pro.nov_2_a }}</td>
+        <td>{{ pro.dec_1_a }}</td>
+        <td>{{ pro.dec_2_a }}</td>
+        <td>{{ pro.jan_1_a }}</td>
+        <td>{{ pro.jan_2_a }}</td>
+        <td>{{ pro.feb_1_a }}</td>
+        <td>{{ pro.feb_2_a }}</td>
+        <td>{{ pro.mar_1_a }}</td>
+        <td>{{ pro.mar_2_a }}</td>
+        <td>{{ pro.apr_1_a }}</td>
+        <td>{{ pro.apr_2_a }}</td>
+        <td>{{ pro.may_1_a }}</td>
+        <td>{{ pro.may_2_a }}</td>
+        <td>{{ pro.jun_1_a }}</td>
+        <td>{{ pro.jun_2_a }}</td>
+        <td>{{pro.total}}</td>
+                
+      </tr>
+      {% endfor %}
+      <tr>
+        <td>Total</td>
+      </tr>
+      {% endif %}
+
+      <tr><td>Expnditures</td></tr>
+      {% if expense_products %}
+    {% for pro in expense_products %}
+      <tr>
+        <td><a href="{% url 'make_transaction' pro.pk %}">{{ pro.subcategory.subcategory_name }}</a></td>
+        <td>{{ pro.subcategory_desc }}</td>
+        <td>{{ pro.jul_1_a }}</td>
+        <td>{{ pro.jul_2_a }}</td>
+        <td>{{ pro.aug_1_a }}</td>
+        <td>{{ pro.aug_2_a }}</td>
+        <td>{{ pro.sep_1_a }}</td>
+        <td>{{ pro.sep_2_a }}</td>
+        <td>{{ pro.oct_1_a }}</td>
+        <td>{{ pro.oct_2_a }}</td>
+        <td>{{ pro.nov_1_a }}</td>
+        <td>{{ pro.nov_2_a }}</td>
+        <td>{{ pro.dec_1_a }}</td>
+        <td>{{ pro.dec_2_a }}</td>
+        <td>{{ pro.jan_1_a }}</td>
+        <td>{{ pro.jan_2_a }}</td>
+        <td>{{ pro.feb_1_a }}</td>
+        <td>{{ pro.feb_2_a }}</td>
+        <td>{{ pro.mar_1_a }}</td>
+        <td>{{ pro.mar_2_a }}</td>
+        <td>{{ pro.apr_1_a }}</td>
+        <td>{{ pro.apr_2_a }}</td>
+        <td>{{ pro.may_1_a }}</td>
+        <td>{{ pro.may_2_a }}</td>
+        <td>{{ pro.jun_1_a }}</td>
+        <td>{{ pro.jun_2_a }}</td>
+        <td>{{pro.total}}</td>
+                
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  
+
+
+
+
+
+
+
+
+</div>
+{% else %}
+  <p>No Products found.</p>
+{% endif %}
+{% endif %}
+{% endblock %}

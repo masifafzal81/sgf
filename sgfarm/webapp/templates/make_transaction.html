@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{{ form|crispy }}
+{% block content %}
+
+
+<!-- your_template.html -->
+ <h3>Create Product Rows</h3>
+<form method="post" action="">
+  {% csrf_token %}
+  
+
+  <div class="form-group">
+    <label for="subcategory" class="form-label">Subcategory</label>
+    <input type="text" class="form-control" id="subcategoryname" name="subcategoryname" 
+    value="{{transaction.subcategory.subcategory_name}}">
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="month" class="form-label">Select Month</label>
+    <select id="month" name="month" class="form-control">
+      <option value="jul_1">Jul-1</option>
+      <option value="jul_2">Jul-2</option>
+      <option value="aug_1">Aug-1</option>
+      <option value="aug_2">Aug-2</option>
+      <option value="sep_1">Sep-1</option>
+      <option value="sep_2">Sep-2</option>
+      <option value="oct_1">Oct-1</option>
+      <option value="oct_2">Oct-2</option>
+      <option value="nov_1">Nov-1</option>
+      <option value="nov_2">Nov-2</option>
+      <option value="dec_1">Dec-1</option>
+      <option value="dec_2">Dec-2</option>
+      <option value="jan_1">Jan-1</option>
+      <option value="jan_2">Jan-2</option>
+      <option value="feb_1">Feb-1</option>
+      <option value="feb_2">Feb-2</option>
+      <option value="mar_1">Mar-1</option>
+      <option value="mar_2">Mar-2</option>
+      <option value="apr_1">Apr-1</option>
+      <option value="apr_2">Apr-2</option>
+      <option value="may_1">May-1</option>
+      <option value="may_2">May-2</option>
+      <option value="jun_1">Jun-1</option>
+      <option value="jun_2">Jun-2</option>
+
+    </select>
+  </div>
+
+
+  <div class="form-group">
+    <label for="Quantity" class="form-label">Quantity</label>
+    <input type="text" class="form-control" id="qty" name="qty" Placeholder="Enter Quantity">
+  </div>
+
+  <div class="form-group">
+    <label for="Rate" class="form-label">Rate</label>
+    <input type="text" class="form-control" id="rate" name="rate" Placeholder="Enter Rate">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Update Transaction</button>
+</form>
+
+{% endblock %}
+
+
+
+ 
