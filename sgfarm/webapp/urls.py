@@ -25,7 +25,7 @@ urlpatterns = [
     path('add_products', views.add_products, name="add_products"),
     path('ajax/load-subcategories/', views.load_subcategories, name='ajax_load_subcategories'),
     path('add_row/', views.add_row, name='add_row'),
-    path('view_products/', views.view_products, name='view_products'),
+     path('view_products/<str:year>/', views.view_products, name='view_products'),
     path('make_transaction/<int:pk>', views.make_transaction, name='make_transaction'),
     path('delete_transaction/<int:pk>/', views.delete_transaction, name='delete_transaction'),
  
