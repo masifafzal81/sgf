@@ -171,7 +171,7 @@ def add_row(request):
         )
 
         messages.success(request, "Data saved successfully!")
-        return redirect('view_products')  # redirect to your desired page
+        return redirect('view_products', year=year)  # redirect to your desired page
     else:
         messages.warning(request, 'You have to login.')
         return redirect('home')
@@ -180,11 +180,13 @@ def view_products(request, year):
     if request.user.is_authenticated:
         income_products = Transaction.objects.filter(
             category__category_type=1, year=year
-        ).order_by('category_id__category_name')
+        ).order_by('category_id')
 
         expense_products = Transaction.objects.filter(
             category__category_type=2, year=year
         ).order_by('category_id__category_name')
+        
+# All Income Total
 
         totals = Transaction.objects.filter(
             category__category_type=1, year=year
@@ -215,11 +217,14 @@ def view_products(request, year):
             total_jun_2_a=Sum('jun_2_a'),
             total=Sum('total'),
         )
+        
 
-        # Replace None with 0 for totals
+        # Replace None with '' for totals
         for key, value in totals.items():
-            totals[key] = value or 0
+            totals[key] = value or ''
 
+# All Expenditures Total
+        
         totals2 = Transaction.objects.filter(
             category__category_type=2, year=year
         ).aggregate(
@@ -252,13 +257,163 @@ def view_products(request, year):
 
         # Replace None with 0 for totals2
         for key, value in totals2.items():
-            totals2[key] = value or 0
+            totals2[key] = value or ''
+
+# All Fertilizer Total
+
+        totals_fertilizer = Transaction.objects.filter(
+            category__category_name='Fertilizer', year=year
+        ).aggregate(
+            total_jul_1_a=Sum('jul_1_a'),
+            total_jul_2_a=Sum('jul_2_a'),
+            total_aug_1_a=Sum('aug_1_a'),
+            total_aug_2_a=Sum('aug_2_a'),
+            total_sep_1_a=Sum('sep_1_a'),
+            total_sep_2_a=Sum('sep_2_a'),
+            total_oct_1_a=Sum('oct_1_a'),
+            total_oct_2_a=Sum('oct_2_a'),
+            total_nov_1_a=Sum('nov_1_a'),
+            total_nov_2_a=Sum('nov_2_a'),
+            total_dec_1_a=Sum('dec_1_a'),
+            total_dec_2_a=Sum('dec_2_a'),
+            total_jan_1_a=Sum('jan_1_a'),
+            total_jan_2_a=Sum('jan_2_a'),
+            total_feb_1_a=Sum('feb_1_a'),
+            total_feb_2_a=Sum('feb_2_a'),
+            total_mar_1_a=Sum('mar_1_a'),
+            total_mar_2_a=Sum('mar_2_a'),
+            total_apr_1_a=Sum('apr_1_a'),
+            total_apr_2_a=Sum('apr_2_a'),
+            total_may_1_a=Sum('may_1_a'),
+            total_may_2_a=Sum('may_2_a'),
+            total_jun_1_a=Sum('jun_1_a'),
+            total_jun_2_a=Sum('jun_2_a'),
+            total=Sum('total'),
+        )
+
+        # Replace None with '' for totals_fertilizer
+        for key, value in totals_fertilizer.items():
+            totals_fertilizer[key] = value or ''
+
+# All Tractor Total
+
+        totals_tractor = Transaction.objects.filter(
+            category__category_name='Tractor', year=year
+        ).aggregate(
+            total_jul_1_a=Sum('jul_1_a'),
+            total_jul_2_a=Sum('jul_2_a'),
+            total_aug_1_a=Sum('aug_1_a'),
+            total_aug_2_a=Sum('aug_2_a'),
+            total_sep_1_a=Sum('sep_1_a'),
+            total_sep_2_a=Sum('sep_2_a'),
+            total_oct_1_a=Sum('oct_1_a'),
+            total_oct_2_a=Sum('oct_2_a'),
+            total_nov_1_a=Sum('nov_1_a'),
+            total_nov_2_a=Sum('nov_2_a'),
+            total_dec_1_a=Sum('dec_1_a'),
+            total_dec_2_a=Sum('dec_2_a'),
+            total_jan_1_a=Sum('jan_1_a'),
+            total_jan_2_a=Sum('jan_2_a'),
+            total_feb_1_a=Sum('feb_1_a'),
+            total_feb_2_a=Sum('feb_2_a'),
+            total_mar_1_a=Sum('mar_1_a'),
+            total_mar_2_a=Sum('mar_2_a'),
+            total_apr_1_a=Sum('apr_1_a'),
+            total_apr_2_a=Sum('apr_2_a'),
+            total_may_1_a=Sum('may_1_a'),
+            total_may_2_a=Sum('may_2_a'),
+            total_jun_1_a=Sum('jun_1_a'),
+            total_jun_2_a=Sum('jun_2_a'),
+            total=Sum('total'),
+        )
+
+        # Replace None with '' for totals_fertilizer
+        for key, value in totals_tractor.items():
+            totals_tractor[key] = value or ''
+
+# All Wages Total
+
+        totals_wages = Transaction.objects.filter(
+            category__category_name='Wages', year=year
+        ).aggregate(
+            total_jul_1_a=Sum('jul_1_a'),
+            total_jul_2_a=Sum('jul_2_a'),
+            total_aug_1_a=Sum('aug_1_a'),
+            total_aug_2_a=Sum('aug_2_a'),
+            total_sep_1_a=Sum('sep_1_a'),
+            total_sep_2_a=Sum('sep_2_a'),
+            total_oct_1_a=Sum('oct_1_a'),
+            total_oct_2_a=Sum('oct_2_a'),
+            total_nov_1_a=Sum('nov_1_a'),
+            total_nov_2_a=Sum('nov_2_a'),
+            total_dec_1_a=Sum('dec_1_a'),
+            total_dec_2_a=Sum('dec_2_a'),
+            total_jan_1_a=Sum('jan_1_a'),
+            total_jan_2_a=Sum('jan_2_a'),
+            total_feb_1_a=Sum('feb_1_a'),
+            total_feb_2_a=Sum('feb_2_a'),
+            total_mar_1_a=Sum('mar_1_a'),
+            total_mar_2_a=Sum('mar_2_a'),
+            total_apr_1_a=Sum('apr_1_a'),
+            total_apr_2_a=Sum('apr_2_a'),
+            total_may_1_a=Sum('may_1_a'),
+            total_may_2_a=Sum('may_2_a'),
+            total_jun_1_a=Sum('jun_1_a'),
+            total_jun_2_a=Sum('jun_2_a'),
+            total=Sum('total'),
+        )
+
+        # Replace None with '' for totals_wages
+        for key, value in totals_wages.items():
+            totals_wages[key] = value or ''
+        
+# All Electricity Total
+
+        totals_electricity = Transaction.objects.filter(
+            category__category_name='Electricity', year=year
+        ).aggregate(
+            total_jul_1_a=Sum('jul_1_a'),
+            total_jul_2_a=Sum('jul_2_a'),
+            total_aug_1_a=Sum('aug_1_a'),
+            total_aug_2_a=Sum('aug_2_a'),
+            total_sep_1_a=Sum('sep_1_a'),
+            total_sep_2_a=Sum('sep_2_a'),
+            total_oct_1_a=Sum('oct_1_a'),
+            total_oct_2_a=Sum('oct_2_a'),
+            total_nov_1_a=Sum('nov_1_a'),
+            total_nov_2_a=Sum('nov_2_a'),
+            total_dec_1_a=Sum('dec_1_a'),
+            total_dec_2_a=Sum('dec_2_a'),
+            total_jan_1_a=Sum('jan_1_a'),
+            total_jan_2_a=Sum('jan_2_a'),
+            total_feb_1_a=Sum('feb_1_a'),
+            total_feb_2_a=Sum('feb_2_a'),
+            total_mar_1_a=Sum('mar_1_a'),
+            total_mar_2_a=Sum('mar_2_a'),
+            total_apr_1_a=Sum('apr_1_a'),
+            total_apr_2_a=Sum('apr_2_a'),
+            total_may_1_a=Sum('may_1_a'),
+            total_may_2_a=Sum('may_2_a'),
+            total_jun_1_a=Sum('jun_1_a'),
+            total_jun_2_a=Sum('jun_2_a'),
+            total=Sum('total'),
+        )
+
+        # Replace None with '' for totals_wages
+        for key, value in totals_electricity.items():
+            totals_electricity[key] = value or ''
+
+
 
         return render(request, 'view_products.html', {
             'income_products': income_products,
             'expense_products': expense_products,
             'totals': totals,
             'totals2': totals2,
+            'totals_fertilizer':totals_fertilizer,
+            'totals_tractor':totals_tractor,
+            'totals_wages':totals_wages,
+            'totals_electricity':totals_electricity,
             'selected_year': year
         })
 
@@ -313,11 +468,14 @@ def make_transaction(request, pk):
 
 def delete_transaction(request, pk):
     if request.user.is_authenticated:
-        
         transaction_delete = get_object_or_404(Transaction, pk=pk)
+        
+        year = transaction_delete.year  
+        
         transaction_delete.delete()
         messages.success(request, "Record deleted successfully.")
-        return redirect('view_products')
+        
+        return redirect('view_products', year=year)  
     else:
         messages.success(request,'You have to login.....')
         return redirect('home')

@@ -231,12 +231,12 @@ a { color: inherit; }
   Qty: {{ pro.jun_2_q }}
   Rate: {{ pro.jun_2_r }}">{% if pro.jun_2_a != 0 %}{{ pro.jun_2_a }}{% endif %}</td>
   <td>{{pro.total}}</td>
-    <td><a href="{% url 'delete_transaction' pro.pk %}"><i class="material-icons" style="color:#1167b1">delete</i></a></td>
+    <td><a href="{% url 'delete_transaction' pro.pk %}" onclick="return confirm('Are you sure you want to delete all related transactions?');"><i class="material-icons" style="color:#1167b1">delete</i></a></td>
                 
   </tr>
 {% endfor %}
     <tr>
-    <td>Total</td>
+    <td>Total Income</td>
     <td></td>
     <td>{{ totals.total_jul_1_a }}</td>
     <td>{{ totals.total_jul_2_a }}</td>
@@ -442,12 +442,140 @@ a { color: inherit; }
   Qty: {{ pro.jun_2_q }}
   Rate: {{ pro.jun_2_r }}">{% if pro.jun_2_a != 0 %}{{ pro.jun_2_a }}{% endif %}</td>
   <td>{{pro.total}}</td>
-  <td><a href="{% url 'delete_transaction' pro.pk %}"><i class="material-icons" style="color:#1167b1">delete</i></a></td>
+  <td><a href="{% url 'delete_transaction' pro.pk %}" onclick="return confirm('Are you sure you want to delete all related transactions?');"><i class="material-icons" style="color:#1167b1">delete</i></a></td>
                 
   </tr>
       {% endfor %}
-      <tr>
-    <td>Total</td>
+      <tr style="background-color: #cee199ff">
+        <td>Total Fertilizer</td>
+        <td></td>
+        <td>{{ totals_fertilizer.total_jul_1_a }}</td>
+      <td>{{ totals_fertilizer.total_jul_2_a }}</td>
+      <td>{{ totals_fertilizer.total_aug_1_a }}</td>
+      <td>{{ totals_fertilizer.total_aug_2_a }}</td>
+      <td>{{ totals_fertilizer.total_sep_1_a }}</td>
+      <td>{{ totals_fertilizer.total_sep_2_a }}</td>
+      <td>{{ totals_fertilizer.total_oct_1_a }}</td>
+      <td>{{ totals_fertilizer.total_oct_2_a }}</td>
+      <td>{{ totals_fertilizer.total_nov_1_a }}</td>
+      <td>{{ totals_fertilizer.total_nov_2_a }}</td>
+      <td>{{ totals_fertilizer.total_dec_1_a }}</td>
+      <td>{{ totals_fertilizer.total_dec_2_a }}</td>
+      <td>{{ totals_fertilizer.total_jan_1_a }}</td>
+      <td>{{ totals_fertilizer.total_jan_2_a }}</td>
+      <td>{{ totals_fertilizer.total_feb_1_a }}</td>
+      <td>{{ totals_fertilizer.total_feb_2_a }}</td>
+      <td>{{ totals_fertilizer.total_mar_1_a }}</td>
+      <td>{{ totals_fertilizer.total_mar_2_a }}</td>
+      <td>{{ totals_fertilizer.total_apr_1_a }}</td>
+      <td>{{ totals_fertilizer.total_apr_2_a }}</td>
+      <td>{{ totals_fertilizer.total_may_1_a }}</td>
+      <td>{{ totals_fertilizer.total_may_2_a }}</td>
+      <td>{{ totals_fertilizer.total_jun_1_a }}</td>
+      <td>{{ totals_fertilizer.total_jun_2_a }}</td>
+      <td>{{ totals_fertilizer.total }}</td>
+        <td></td>
+        
+      </tr>
+
+      <tr style="background-color: #99c5e1ff">
+        <td>Total Tractor</td>
+        <td></td>
+        <td>{{ totals_tractor.total_jul_1_a }}</td>
+      <td>{{ totals_tractor.total_jul_2_a }}</td>
+      <td>{{ totals_tractor.total_aug_1_a }}</td>
+      <td>{{ totals_tractor.total_aug_2_a }}</td>
+      <td>{{ totals_tractor.total_sep_1_a }}</td>
+      <td>{{ totals_tractor.total_sep_2_a }}</td>
+      <td>{{ totals_tractor.total_oct_1_a }}</td>
+      <td>{{ totals_tractor.total_oct_2_a }}</td>
+      <td>{{ totals_tractor.total_nov_1_a }}</td>
+      <td>{{ totals_tractor.total_nov_2_a }}</td>
+      <td>{{ totals_tractor.total_dec_1_a }}</td>
+      <td>{{ totals_tractor.total_dec_2_a }}</td>
+      <td>{{ totals_tractor.total_jan_1_a }}</td>
+      <td>{{ totals_tractor.total_jan_2_a }}</td>
+      <td>{{ totals_tractor.total_feb_1_a }}</td>
+      <td>{{ totals_tractor.total_feb_2_a }}</td>
+      <td>{{ totals_tractor.total_mar_1_a }}</td>
+      <td>{{ totals_tractor.total_mar_2_a }}</td>
+      <td>{{ totals_tractor.total_apr_1_a }}</td>
+      <td>{{ totals_tractor.total_apr_2_a }}</td>
+      <td>{{ totals_tractor.total_may_1_a }}</td>
+      <td>{{ totals_tractor.total_may_2_a }}</td>
+      <td>{{ totals_tractor.total_jun_1_a }}</td>
+      <td>{{ totals_tractor.total_jun_2_a }}</td>
+      <td>{{ totals_tractor.total }}</td>
+        <td></td>
+        
+      </tr>
+
+      <tr style="background-color: #e1c399ff">
+        <td>Total Wages</td>
+        <td></td>
+        <td>{{ totals_wages.total_jul_1_a }}</td>
+      <td>{{ totals_wages.total_jul_2_a }}</td>
+      <td>{{ totals_wages.total_aug_1_a }}</td>
+      <td>{{ totals_wages.total_aug_2_a }}</td>
+      <td>{{ totals_wages.total_sep_1_a }}</td>
+      <td>{{ totals_wages.total_sep_2_a }}</td>
+      <td>{{ totals_wages.total_oct_1_a }}</td>
+      <td>{{ totals_wages.total_oct_2_a }}</td>
+      <td>{{ totals_wages.total_nov_1_a }}</td>
+      <td>{{ totals_wages.total_nov_2_a }}</td>
+      <td>{{ totals_wages.total_dec_1_a }}</td>
+      <td>{{ totals_wages.total_dec_2_a }}</td>
+      <td>{{ totals_wages.total_jan_1_a }}</td>
+      <td>{{ totals_wages.total_jan_2_a }}</td>
+      <td>{{ totals_wages.total_feb_1_a }}</td>
+      <td>{{ totals_wages.total_feb_2_a }}</td>
+      <td>{{ totals_wages.total_mar_1_a }}</td>
+      <td>{{ totals_wages.total_mar_2_a }}</td>
+      <td>{{ totals_wages.total_apr_1_a }}</td>
+      <td>{{ totals_wages.total_apr_2_a }}</td>
+      <td>{{ totals_wages.total_may_1_a }}</td>
+      <td>{{ totals_wages.total_may_2_a }}</td>
+      <td>{{ totals_wages.total_jun_1_a }}</td>
+      <td>{{ totals_wages.total_jun_2_a }}</td>
+      <td>{{ totals_wages.total }}</td>
+        <td></td>
+        
+      </tr>
+
+      <tr style="background-color: #99e1e1ff">
+        <td>Total Electricity</td>
+        <td></td>
+        <td>{{ totals_electricity.total_jul_1_a }}</td>
+      <td>{{ totals_electricity.total_jul_2_a }}</td>
+      <td>{{ totals_electricity.total_aug_1_a }}</td>
+      <td>{{ totals_electricity.total_aug_2_a }}</td>
+      <td>{{ totals_electricity.total_sep_1_a }}</td>
+      <td>{{ totals_electricity.total_sep_2_a }}</td>
+      <td>{{ totals_electricity.total_oct_1_a }}</td>
+      <td>{{ totals_electricity.total_oct_2_a }}</td>
+      <td>{{ totals_electricity.total_nov_1_a }}</td>
+      <td>{{ totals_electricity.total_nov_2_a }}</td>
+      <td>{{ totals_electricity.total_dec_1_a }}</td>
+      <td>{{ totals_electricity.total_dec_2_a }}</td>
+      <td>{{ totals_electricity.total_jan_1_a }}</td>
+      <td>{{ totals_electricity.total_jan_2_a }}</td>
+      <td>{{ totals_electricity.total_feb_1_a }}</td>
+      <td>{{ totals_electricity.total_feb_2_a }}</td>
+      <td>{{ totals_electricity.total_mar_1_a }}</td>
+      <td>{{ totals_electricity.total_mar_2_a }}</td>
+      <td>{{ totals_electricity.total_apr_1_a }}</td>
+      <td>{{ totals_electricity.total_apr_2_a }}</td>
+      <td>{{ totals_electricity.total_may_1_a }}</td>
+      <td>{{ totals_electricity.total_may_2_a }}</td>
+      <td>{{ totals_electricity.total_jun_1_a }}</td>
+      <td>{{ totals_electricity.total_jun_2_a }}</td>
+      <td>{{ totals_electricity.total }}</td>
+        <td></td>
+        
+      </tr>
+
+      <tr style="background-color: #c499e1ff">
+    <td>Total Expenditures</td>
     <td></td>
     <td>{{ totals2.total_jul_1_a }}</td>
     <td>{{ totals2.total_jul_2_a }}</td>
@@ -479,11 +607,8 @@ a { color: inherit; }
 </tr>
     </tbody>
   </table>
-
-
 </div>
 {% else %}
-  <p>No Products found.</p>
 {% endif %}
 {% endif %}
 {% endblock %}
