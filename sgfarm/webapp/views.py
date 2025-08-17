@@ -1,14 +1,12 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from . models import Category, Subcategory, Transaction
 from . forms import AddCategoryForm, AddSubcategoryForm
-from django.db.models import F, Value
-from django.db.models import FloatField
 from django.db.models import Sum
-from django.db.models.functions import Coalesce
-from django.db import connection
+from .models import UserProfile
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
@@ -34,7 +32,66 @@ def home(request):
     
     else:
         return render(request, 'home.html', {})
+    
 
+# Reset Password Function
+
+def reset_password(request):
+    if request.method == "POST":
+        old_password = request.POST.get("old_password")
+        new_password1 = request.POST.get("new_password1")
+        new_password2 = request.POST.get("new_password2")
+
+        if not request.user.check_password(old_password):
+            messages.error(request, "Old password is incorrect.")
+            return redirect("home")
+
+        if new_password1 != new_password2:
+            messages.error(request, "New passwords do not match.")
+            return redirect("home")
+
+        # Set new password
+        request.user.set_password(new_password1)
+        request.user.save()
+
+        # Keep user logged in after password change
+        update_session_auth_hash(request, request.user)
+
+        messages.success(request, "Your password has been updated successfully.")
+        return redirect("home")
+
+    return render(request, "reset_password.html")
+
+# Update Profile Function
+
+@login_required
+def profile_update(request):
+    if not request.user.is_authenticated:
+        return redirect("home")
+
+    user = request.user
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+
+    if request.method == "POST":
+        # update email
+        email = request.POST.get("email")
+        if email and email != user.email:
+            user.email = email
+            user.save()
+
+        # update profile picture
+        profile_pic = request.FILES.get("profile_pic")
+        if profile_pic:
+            profile.profile_pic = profile_pic
+            profile.save()
+
+        messages.success(request, "Profile updated successfully ")
+        return redirect("home")  # redirect to home or profile page
+
+    return render(request, "home.html", {"user": user, "profile": profile})
+
+
+# logout function
     
 def logout_view(request):
     logout(request)
@@ -368,6 +425,7 @@ def view_products(request, year):
             totals_wages[key] = value or ''
         
 # All Electricity Total
+# All Tubewel Total
 
         totals_electricity = Transaction.objects.filter(
             category__category_name='Electricity', year=year
@@ -403,7 +461,42 @@ def view_products(request, year):
         for key, value in totals_electricity.items():
             totals_electricity[key] = value or ''
 
+# All Tubewel Total
 
+        totals_tubewel = Transaction.objects.filter(
+            category__category_name='Tubewel', year=year
+        ).aggregate(
+            total_jul_1_a=Sum('jul_1_a'),
+            total_jul_2_a=Sum('jul_2_a'),
+            total_aug_1_a=Sum('aug_1_a'),
+            total_aug_2_a=Sum('aug_2_a'),
+            total_sep_1_a=Sum('sep_1_a'),
+            total_sep_2_a=Sum('sep_2_a'),
+            total_oct_1_a=Sum('oct_1_a'),
+            total_oct_2_a=Sum('oct_2_a'),
+            total_nov_1_a=Sum('nov_1_a'),
+            total_nov_2_a=Sum('nov_2_a'),
+            total_dec_1_a=Sum('dec_1_a'),
+            total_dec_2_a=Sum('dec_2_a'),
+            total_jan_1_a=Sum('jan_1_a'),
+            total_jan_2_a=Sum('jan_2_a'),
+            total_feb_1_a=Sum('feb_1_a'),
+            total_feb_2_a=Sum('feb_2_a'),
+            total_mar_1_a=Sum('mar_1_a'),
+            total_mar_2_a=Sum('mar_2_a'),
+            total_apr_1_a=Sum('apr_1_a'),
+            total_apr_2_a=Sum('apr_2_a'),
+            total_may_1_a=Sum('may_1_a'),
+            total_may_2_a=Sum('may_2_a'),
+            total_jun_1_a=Sum('jun_1_a'),
+            total_jun_2_a=Sum('jun_2_a'),
+            total=Sum('total'),
+        )
+
+        # Replace None with '' for totals_wages
+        for key, value in totals_tubewel.items():
+            totals_tubewel[key] = value or ''
+            
 
         return render(request, 'view_products.html', {
             'income_products': income_products,
@@ -414,6 +507,7 @@ def view_products(request, year):
             'totals_tractor':totals_tractor,
             'totals_wages':totals_wages,
             'totals_electricity':totals_electricity,
+            'totals_tubewel': totals_tubewel,
             'selected_year': year
         })
 
