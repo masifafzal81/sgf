@@ -1,6 +1,3 @@
-from django.conf import settings
-from django.conf.urls.static import static
-
 from django.urls import path
 from . import views
 
@@ -35,6 +32,6 @@ urlpatterns = [
     path('make_transaction/<int:pk>', views.make_transaction, name='make_transaction'),
     path('delete_transaction/<int:pk>/', views.delete_transaction, name='delete_transaction'),
  
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
 
 

@@ -9,7 +9,7 @@
 <form method="post" action="">
   {% csrf_token %}
   
-
+  <input type="hidden" name="subcategory_id" id="subcategory_id" value="transaction.subcategory.subcategory_id">
   <div class="form-group">
     <label for="subcategory" class="form-label">Subcategory</label>
     <input type="text" class="form-control" id="subcategoryname" name="subcategoryname" 

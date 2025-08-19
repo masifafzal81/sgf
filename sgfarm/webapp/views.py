@@ -218,20 +218,28 @@ def add_row(request):
     if request.method == "POST":
         category_id = request.POST.get("category")
         subcategory_id = request.POST.get("subcategory")
-        year = request.POST.get("year")
 
-        # Save to database
-        Transaction.objects.create(
-            category_id=category_id,
-            subcategory_id=subcategory_id,
-            year=year
-        )
+        # Generate year ranges dynamically from 2025-2026 to 2034-2035
+        year_ranges = []
+        for start in range(2025, 2035):  # 2025 → 2034
+            end = start + 1
+            year_ranges.append(f"{start}-{end}")
 
-        messages.success(request, "Data saved successfully!")
-        return redirect('view_products', year=year)  # redirect to your desired page
+        # Save a row for each year range
+        for year in year_ranges:
+            Transaction.objects.create(
+                category_id=category_id,
+                subcategory_id=subcategory_id,
+                year=year
+            )
+
+        messages.success(request, "Data saved successfully for all year ranges!")
+        return redirect('view_products', year="2025-2026")  
     else:
         messages.warning(request, 'You have to login.')
         return redirect('home')
+    
+    
 
 def view_products(request, year):
     if request.user.is_authenticated:
@@ -496,6 +504,8 @@ def view_products(request, year):
         # Replace None with '' for totals_wages
         for key, value in totals_tubewel.items():
             totals_tubewel[key] = value or ''
+
+
             
 
         return render(request, 'view_products.html', {
@@ -507,8 +517,9 @@ def view_products(request, year):
             'totals_tractor':totals_tractor,
             'totals_wages':totals_wages,
             'totals_electricity':totals_electricity,
-            'totals_tubewel': totals_tubewel,
-            'selected_year': year
+            'totals_tubewel':totals_tubewel,
+            'selected_year': year,
+            
         })
 
     else:

@@ -1,0 +1,24 @@
+<div class="col-md-6">
+      <div class="card p-4 shadow-sm">
+        <h4 class="text-success mb-3">Update Profile</h4>
+        <form method="post" action="{% url 'profile_update' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="name" class="form-label fw-bold">Username</label>
+            <input type="text" class="form-control rounded-3" id="name" name="name" value="{{ user.username }}">
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label fw-bold">Email</label>
+            <input type="email" class="form-control rounded-3" id="email" name="email" value="{{ user.email }}">
+          </div>
+
+          <div class="mb-3">
+            <label for="profile_pic" class="form-label fw-bold">Profile Picture</label>
+            <input type="file" class="form-control rounded-3" id="profile_pic" name="profile_pic">
+          </div>
+
+          <button type="submit" class="btn btn-custom w-100 rounded-3">Update Profile</button>
+        </form>
+      </div>
+    </div>
