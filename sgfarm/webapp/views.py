@@ -101,19 +101,43 @@ def logout_view(request):
 
 # Category Methods
 
+# def add_category(request):
+#     form = AddCategoryForm(request.POST or None) 
+#     if request.user.is_authenticated:
+#         if request.method == 'POST':
+#             if form.is_valid():
+#                 add_category = form.save()
+#                 messages.success(request,'Category added successfully.')
+#                 return redirect('view_category')
+#         return render(request,'add_category.html', {'form':form})
+#     else:
+#         messages.success(request, 'You have to login to add categories.')
+#         return redirect('home')
+
 def add_category(request):
     form = AddCategoryForm(request.POST or None) 
     if request.user.is_authenticated:
         if request.method == 'POST':
             if form.is_valid():
-                add_category = form.save()
-                messages.success(request,'Category added successfully.')
-                return redirect('view_category')
-        return render(request,'add_category.html', {'form':form})
-    else:
-        messages.success(request, 'You have to login to add categories.')
-        return redirect('home')
+                category_name = form.cleaned_data.get("category_name").strip()
 
+                # Check if category already exists (case-insensitive)
+                exists = Category.objects.filter(
+                    category_name__iexact=category_name
+                ).exists()
+
+                if exists:
+                    messages.warning(request, f"Category '{category_name}' already exists.")
+                else:
+                    form.save()
+                    messages.success(request, f"Category '{category_name}' added successfully.")
+                
+                return redirect('view_category')
+        return render(request, 'add_category.html', {'form': form})
+    else:
+        messages.error(request, 'You have to login to add categories.')
+        return redirect('home')
+    
 def view_category(request):
     if request.user.is_authenticated:
         
@@ -157,14 +181,25 @@ def add_subcategory(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             if form.is_valid():
-                add_subcategory = form.save()
-                messages.success(request,'Subcategory added successfully.')
-                return redirect('view_subcategory')
-        return render(request,'add_subcategory.html', {'form':form})
-    else:
-        messages.success(request, 'You have to login to add subcategories.')
-        return redirect('home')
+                subcategory_name = form.cleaned_data.get("subcategory_name").strip()
 
+                # Check if subcategory already exists (case-insensitive)
+                exists = Subcategory.objects.filter(
+                    subcategory_name__iexact=subcategory_name
+                ).exists()
+
+                if exists:
+                    messages.warning(request, f"Subcategory '{subcategory_name}' already exists.")
+                else:
+                    form.save()
+                    messages.success(request, f"Subcategory '{subcategory_name}' added successfully.")
+                
+                return redirect('view_subcategory')
+        return render(request, 'add_subcategory.html', {'form': form})
+    else:
+        messages.error(request, 'You have to login to add subcategories.')
+        return redirect('home')
+    
 def view_subcategory(request):
     if request.user.is_authenticated:
 
@@ -224,16 +259,38 @@ def add_row(request):
         for start in range(2025, 2035):  # 2025 → 2034
             end = start + 1
             year_ranges.append(f"{start}-{end}")
+        
+        # Track if any duplicates were found
+        duplicates = []
+        created_count = 0
 
-        # Save a row for each year range
         for year in year_ranges:
-            Transaction.objects.create(
+            exists = Transaction.objects.filter(
                 category_id=category_id,
                 subcategory_id=subcategory_id,
                 year=year
-            )
+            ).exists()
 
-        messages.success(request, "Data saved successfully for all year ranges!")
+            if exists:
+                duplicates.append(year)  # remember which years already exist
+            else:
+                Transaction.objects.create(
+                    category_id=category_id,
+                    subcategory_id=subcategory_id,
+                    year=year
+                )
+                created_count += 1
+
+        # Messages for user
+        if created_count > 0:
+            messages.success(request, f"Row for the subcategory created successfully.")
+
+        if duplicates:
+            messages.warning(
+                request,
+                f"Already exists."
+            )
+            
         return redirect('view_products', year="2025-2026")  
     else:
         messages.warning(request, 'You have to login.')
@@ -249,7 +306,7 @@ def view_products(request, year):
 
         expense_products = Transaction.objects.filter(
             category__category_type=2, year=year
-        ).order_by('category_id__category_name')
+        ).order_by('category_id__category_id')
         
 # All Income Total
 
@@ -359,6 +416,7 @@ def view_products(request, year):
         # Replace None with '' for totals_fertilizer
         for key, value in totals_fertilizer.items():
             totals_fertilizer[key] = value or ''
+        fertilizer_exists = any(value not in (None, '', 0) for value in totals_fertilizer.values())
 
 # All Tractor Total
 
@@ -392,9 +450,11 @@ def view_products(request, year):
             total=Sum('total'),
         )
 
-        # Replace None with '' for totals_fertilizer
+        # Replace None with '' for totals_tractor
         for key, value in totals_tractor.items():
             totals_tractor[key] = value or ''
+            
+        tractor_exists = any(value not in (None, '', 0) for value in totals_tractor.values())
 
 # All Wages Total
 
@@ -432,7 +492,9 @@ def view_products(request, year):
         for key, value in totals_wages.items():
             totals_wages[key] = value or ''
         
-# All Electricity Total
+        wages_exists = any(value not in (None, '', 0) for value in totals_wages.values())
+        
+
 # All Tubewel Total
 
         totals_electricity = Transaction.objects.filter(
@@ -468,6 +530,8 @@ def view_products(request, year):
         # Replace None with '' for totals_wages
         for key, value in totals_electricity.items():
             totals_electricity[key] = value or ''
+            
+        electricity_exists = any(value not in (None, '', 0) for value in totals_electricity.values())
 
 # All Tubewel Total
 
@@ -501,12 +565,239 @@ def view_products(request, year):
             total=Sum('total'),
         )
 
-        # Replace None with '' for totals_wages
+        # Replace None with '' for totals_tubewel
         for key, value in totals_tubewel.items():
             totals_tubewel[key] = value or ''
+        
+        tubewel_exists = any(value not in (None, '', 0) for value in totals_tubewel.values())
 
+# All Spray Total
 
-            
+        totals_spray = Transaction.objects.filter(
+            category__category_name='Spray', year=year
+        ).aggregate(
+            total_jul_1_a=Sum('jul_1_a'),
+            total_jul_2_a=Sum('jul_2_a'),
+            total_aug_1_a=Sum('aug_1_a'),
+            total_aug_2_a=Sum('aug_2_a'),
+            total_sep_1_a=Sum('sep_1_a'),
+            total_sep_2_a=Sum('sep_2_a'),
+            total_oct_1_a=Sum('oct_1_a'),
+            total_oct_2_a=Sum('oct_2_a'),
+            total_nov_1_a=Sum('nov_1_a'),
+            total_nov_2_a=Sum('nov_2_a'),
+            total_dec_1_a=Sum('dec_1_a'),
+            total_dec_2_a=Sum('dec_2_a'),
+            total_jan_1_a=Sum('jan_1_a'),
+            total_jan_2_a=Sum('jan_2_a'),
+            total_feb_1_a=Sum('feb_1_a'),
+            total_feb_2_a=Sum('feb_2_a'),
+            total_mar_1_a=Sum('mar_1_a'),
+            total_mar_2_a=Sum('mar_2_a'),
+            total_apr_1_a=Sum('apr_1_a'),
+            total_apr_2_a=Sum('apr_2_a'),
+            total_may_1_a=Sum('may_1_a'),
+            total_may_2_a=Sum('may_2_a'),
+            total_jun_1_a=Sum('jun_1_a'),
+            total_jun_2_a=Sum('jun_2_a'),
+            total=Sum('total'),
+        )
+
+        # Replace None with '' for totals_tubewel
+        for key, value in totals_spray.items():
+            totals_spray[key] = value or ''
+        
+        spray_exists = any(value not in (None, '', 0) for value in totals_spray.values())
+
+# All Implements Total
+
+        totals_implements = Transaction.objects.filter(
+            category__category_name='Implements', year=year
+        ).aggregate(
+            total_jul_1_a=Sum('jul_1_a'),
+            total_jul_2_a=Sum('jul_2_a'),
+            total_aug_1_a=Sum('aug_1_a'),
+            total_aug_2_a=Sum('aug_2_a'),
+            total_sep_1_a=Sum('sep_1_a'),
+            total_sep_2_a=Sum('sep_2_a'),
+            total_oct_1_a=Sum('oct_1_a'),
+            total_oct_2_a=Sum('oct_2_a'),
+            total_nov_1_a=Sum('nov_1_a'),
+            total_nov_2_a=Sum('nov_2_a'),
+            total_dec_1_a=Sum('dec_1_a'),
+            total_dec_2_a=Sum('dec_2_a'),
+            total_jan_1_a=Sum('jan_1_a'),
+            total_jan_2_a=Sum('jan_2_a'),
+            total_feb_1_a=Sum('feb_1_a'),
+            total_feb_2_a=Sum('feb_2_a'),
+            total_mar_1_a=Sum('mar_1_a'),
+            total_mar_2_a=Sum('mar_2_a'),
+            total_apr_1_a=Sum('apr_1_a'),
+            total_apr_2_a=Sum('apr_2_a'),
+            total_may_1_a=Sum('may_1_a'),
+            total_may_2_a=Sum('may_2_a'),
+            total_jun_1_a=Sum('jun_1_a'),
+            total_jun_2_a=Sum('jun_2_a'),
+            total=Sum('total'),
+        )
+
+        # Replace None with '' for totals_implements
+        for key, value in totals_implements.items():
+            totals_implements[key] = value or ''
+        
+        implements_exists = any(value not in (None, '', 0) for value in totals_implements.values()) 
+
+# All Construction Total
+
+        totals_construction = Transaction.objects.filter(
+            category__category_name='Construction', year=year
+        ).aggregate(
+            total_jul_1_a=Sum('jul_1_a'),
+            total_jul_2_a=Sum('jul_2_a'),
+            total_aug_1_a=Sum('aug_1_a'),
+            total_aug_2_a=Sum('aug_2_a'),
+            total_sep_1_a=Sum('sep_1_a'),
+            total_sep_2_a=Sum('sep_2_a'),
+            total_oct_1_a=Sum('oct_1_a'),
+            total_oct_2_a=Sum('oct_2_a'),
+            total_nov_1_a=Sum('nov_1_a'),
+            total_nov_2_a=Sum('nov_2_a'),
+            total_dec_1_a=Sum('dec_1_a'),
+            total_dec_2_a=Sum('dec_2_a'),
+            total_jan_1_a=Sum('jan_1_a'),
+            total_jan_2_a=Sum('jan_2_a'),
+            total_feb_1_a=Sum('feb_1_a'),
+            total_feb_2_a=Sum('feb_2_a'),
+            total_mar_1_a=Sum('mar_1_a'),
+            total_mar_2_a=Sum('mar_2_a'),
+            total_apr_1_a=Sum('apr_1_a'),
+            total_apr_2_a=Sum('apr_2_a'),
+            total_may_1_a=Sum('may_1_a'),
+            total_may_2_a=Sum('may_2_a'),
+            total_jun_1_a=Sum('jun_1_a'),
+            total_jun_2_a=Sum('jun_2_a'),
+            total=Sum('total'),
+        )
+
+        # Replace None with '' for totals_construction
+        for key, value in totals_construction.items():
+            totals_construction[key] = value or ''
+        
+        construction_exists = any(value not in (None, '', 0) for value in totals_construction.values())   
+
+# All Repair Total
+
+        totals_repair = Transaction.objects.filter(
+            category__category_name='Repair', year=year
+        ).aggregate(
+            total_jul_1_a=Sum('jul_1_a'),
+            total_jul_2_a=Sum('jul_2_a'),
+            total_aug_1_a=Sum('aug_1_a'),
+            total_aug_2_a=Sum('aug_2_a'),
+            total_sep_1_a=Sum('sep_1_a'),
+            total_sep_2_a=Sum('sep_2_a'),
+            total_oct_1_a=Sum('oct_1_a'),
+            total_oct_2_a=Sum('oct_2_a'),
+            total_nov_1_a=Sum('nov_1_a'),
+            total_nov_2_a=Sum('nov_2_a'),
+            total_dec_1_a=Sum('dec_1_a'),
+            total_dec_2_a=Sum('dec_2_a'),
+            total_jan_1_a=Sum('jan_1_a'),
+            total_jan_2_a=Sum('jan_2_a'),
+            total_feb_1_a=Sum('feb_1_a'),
+            total_feb_2_a=Sum('feb_2_a'),
+            total_mar_1_a=Sum('mar_1_a'),
+            total_mar_2_a=Sum('mar_2_a'),
+            total_apr_1_a=Sum('apr_1_a'),
+            total_apr_2_a=Sum('apr_2_a'),
+            total_may_1_a=Sum('may_1_a'),
+            total_may_2_a=Sum('may_2_a'),
+            total_jun_1_a=Sum('jun_1_a'),
+            total_jun_2_a=Sum('jun_2_a'),
+            total=Sum('total'),
+        )
+
+        # Replace None with '' for totals_construction
+        for key, value in totals_repair.items():
+            totals_repair[key] = value or ''
+        
+        repair_exists = any(value not in (None, '', 0) for value in totals_repair.values())     
+
+# All Developments Total
+
+        totals_developments = Transaction.objects.filter(
+            category__category_name='Development', year=year
+        ).aggregate(
+            total_jul_1_a=Sum('jul_1_a'),
+            total_jul_2_a=Sum('jul_2_a'),
+            total_aug_1_a=Sum('aug_1_a'),
+            total_aug_2_a=Sum('aug_2_a'),
+            total_sep_1_a=Sum('sep_1_a'),
+            total_sep_2_a=Sum('sep_2_a'),
+            total_oct_1_a=Sum('oct_1_a'),
+            total_oct_2_a=Sum('oct_2_a'),
+            total_nov_1_a=Sum('nov_1_a'),
+            total_nov_2_a=Sum('nov_2_a'),
+            total_dec_1_a=Sum('dec_1_a'),
+            total_dec_2_a=Sum('dec_2_a'),
+            total_jan_1_a=Sum('jan_1_a'),
+            total_jan_2_a=Sum('jan_2_a'),
+            total_feb_1_a=Sum('feb_1_a'),
+            total_feb_2_a=Sum('feb_2_a'),
+            total_mar_1_a=Sum('mar_1_a'),
+            total_mar_2_a=Sum('mar_2_a'),
+            total_apr_1_a=Sum('apr_1_a'),
+            total_apr_2_a=Sum('apr_2_a'),
+            total_may_1_a=Sum('may_1_a'),
+            total_may_2_a=Sum('may_2_a'),
+            total_jun_1_a=Sum('jun_1_a'),
+            total_jun_2_a=Sum('jun_2_a'),
+            total=Sum('total'),
+        )
+
+        # Replace None with '' for totals_construction
+        for key, value in totals_developments.items():
+            totals_developments[key] = value or ''
+        
+        developments_exists = any(value not in (None, '', 0) for value in totals_developments.values())   
+
+# All Miscellaneous Total
+
+        totals_misc = Transaction.objects.filter(
+            category__category_name='Miscellaneous', year=year
+        ).aggregate(
+            total_jul_1_a=Sum('jul_1_a'),
+            total_jul_2_a=Sum('jul_2_a'),
+            total_aug_1_a=Sum('aug_1_a'),
+            total_aug_2_a=Sum('aug_2_a'),
+            total_sep_1_a=Sum('sep_1_a'),
+            total_sep_2_a=Sum('sep_2_a'),
+            total_oct_1_a=Sum('oct_1_a'),
+            total_oct_2_a=Sum('oct_2_a'),
+            total_nov_1_a=Sum('nov_1_a'),
+            total_nov_2_a=Sum('nov_2_a'),
+            total_dec_1_a=Sum('dec_1_a'),
+            total_dec_2_a=Sum('dec_2_a'),
+            total_jan_1_a=Sum('jan_1_a'),
+            total_jan_2_a=Sum('jan_2_a'),
+            total_feb_1_a=Sum('feb_1_a'),
+            total_feb_2_a=Sum('feb_2_a'),
+            total_mar_1_a=Sum('mar_1_a'),
+            total_mar_2_a=Sum('mar_2_a'),
+            total_apr_1_a=Sum('apr_1_a'),
+            total_apr_2_a=Sum('apr_2_a'),
+            total_may_1_a=Sum('may_1_a'),
+            total_may_2_a=Sum('may_2_a'),
+            total_jun_1_a=Sum('jun_1_a'),
+            total_jun_2_a=Sum('jun_2_a'),
+            total=Sum('total'),
+        )
+
+        # Replace None with '' for totals_construction
+        for key, value in totals_misc.items():
+            totals_misc[key] = value or ''
+        
+        misc_exists = any(value not in (None, '', 0) for value in totals_misc.values())          
 
         return render(request, 'view_products.html', {
             'income_products': income_products,
@@ -514,10 +805,28 @@ def view_products(request, year):
             'totals': totals,
             'totals2': totals2,
             'totals_fertilizer':totals_fertilizer,
+            'fertilizer_exists':fertilizer_exists,
             'totals_tractor':totals_tractor,
+            'tractor_exists':tractor_exists,
             'totals_wages':totals_wages,
+            'wages_exists':wages_exists,
             'totals_electricity':totals_electricity,
+            'electricity_exists':electricity_exists,
             'totals_tubewel':totals_tubewel,
+            'tubewel_exists':tubewel_exists,
+            'totals_spray':totals_spray,
+            'spray_exists':spray_exists,
+            'totals_implements':totals_implements,
+            'implements_exists':implements_exists,
+            'totals_construction':totals_construction,
+            'construction_exists':construction_exists,
+            'totals_repair':totals_repair,
+            'repair_exists':repair_exists,
+            'totals_developments':totals_developments,
+            'developments_exists':developments_exists,
+            'totals_misc':totals_misc,
+            'misc_exists':misc_exists,
+
             'selected_year': year,
             
         })

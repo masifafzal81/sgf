@@ -1,0 +1,220 @@
+<table class="custom-table">
+    <thead> 
+    <tr>
+        <th>Income</th>
+        <th>Description</th>
+        <th>Jul-1</th>
+        <th>Jul-2</th>
+        <th>Aug-1</th>
+        <th>Aug-2</th>
+        <th>Sep-1</th>
+        <th>Sep-2</th>
+        <th>Oct-1</th>
+        <th>Oct-2</th>
+        <th>Nov-1</th>
+        <th>Nov-2</th>
+        <th>Dec-1</th>
+        <th>Dec-2</th>
+        <th>Jan-1</th>
+        <th>Jan-2</th>
+        <th>Feb-1</th>
+        <th>Feb-2</th>
+        <th>Mar-1</th>
+        <th>Mar-2</th>
+        <th>Apr-1</th>
+        <th>Apr-2</th>
+        <th>May-1</th>
+        <th>May-2</th>
+        <th>Jun-1</th>
+        <th>Jun-2</th>
+        <th>Total</th>
+        <th>Del</th>
+        </tr>
+    
+    </thead>
+    <tbody>
+
+
+{% for pro in income_products %}
+   
+  <tr>
+  <td><a href="{% url 'make_transaction' pro.pk %}">{{ pro.subcategory.subcategory_name }}</a></td>
+  <td>{{ pro.subcategory_desc }}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  July-1 
+  Qty: {{ pro.jul_1_q }}
+  Rate: {{ pro.jul_1_r }}">
+  {% if pro.jul_1_a != 0 %}{{ pro.jul_1_a|floatformat:0 }}{% endif %}</td>
+
+  <td title="{{ pro.subcategory.subcategory_name }}
+  July-2 
+  Qty: {{ pro.jul_2_q }}
+  Rate: {{ pro.jul_2_r }}">
+  {% if pro.jul_2_a != 0 %}{{ pro.jul_2_a|floatformat:0  }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  August-1 
+  Qty: {{ pro.aug_1_q }}
+  Rate: {{ pro.aug_1_r }}">
+  {% if pro.aug_1_a != 0 %}{{ pro.aug_1_a|floatformat:0  }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  August-2
+  Qty: {{ pro.aug_2_q }}
+  Rate: {{ pro.aug_2_r }}">
+  {% if pro.aug_2_a != 0 %}{{ pro.aug_2_a|floatformat:0  }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  September-1
+  Qty: {{ pro.sep_1_q }}
+  Rate: {{ pro.sep_1_r }}">
+  {% if pro.sep_1_a != 0 %}{{ pro.sep_1_a|floatformat:0  }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  September-2
+  Qty: {{ pro.sep_2_q }}
+  Rate: {{ pro.sep_2_r }}">
+  {% if pro.sep_2_a != 0 %}{{ pro.sep_2_a|floatformat:0  }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  October-1 
+  Qty: {{ pro.oct_1_q }}
+  Rate: {{ pro.oct_1_r }}">
+  {% if pro.oct_1_a != 0 %}{{ pro.oct_1_a|floatformat:0  }}{% endif %}</td>
+
+  <td title="{{ pro.subcategory.subcategory_name }}
+  October-2
+  Qty: {{ pro.oct_2_q }} | Rate: {{ pro.oct_2_r }}">
+  {% if pro.oct_2_a != 0 %}{{ pro.oct_2_a|floatformat:0 }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  November-1
+  Qty: {{ pro.nov_1_q }}
+  Rate: {{ pro.nov_1_r }}">
+  {% if pro.nov_1_a != 0 %}{{ pro.nov_1_a|floatformat:0 }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  November-2
+  Qty: {{ pro.nov_2_q }}
+  Rate: {{ pro.nov_2_r }}">
+  {% if pro.nov_2_a != 0 %}{{ pro.nov_2_a|floatformat:0 }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  December-1
+  Qty: {{ pro.dec_1_q }}
+  Rate: {{ pro.dec_1_r }}">
+  {% if pro.dec_1_a != 0 %}{{ pro.dec_1_a|floatformat:0 }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  December-2
+  Qty: {{ pro.dec_2_q }}
+  Rate: {{ pro.dec_2_r }}">
+  {% if pro.dec_2_a != 0 %}{{ pro.dec_2_a|floatformat:0}}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  January-1
+  Qty: {{ pro.jan_1_q }}
+  Rate: {{ pro.jan_1_r }}">
+  {% if pro.jan_1_a != 0 %}{{ pro.jan_1_a|floatformat:0 }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  January-2
+  Qty: {{ pro.jan_2_q }}
+  Rate: {{ pro.jan_2_r }}">
+  {% if pro.jan_2_a != 0 %}{{ pro.jan_2_a|floatformat:0 }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  February-1
+  Qty: {{ pro.feb_1_q }}
+  Rate: {{ pro.feb_1_r }}">
+  {% if pro.feb_1_a != 0 %}{{ pro.feb_1_a|floatformat:0 }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  February-2
+  Qty: {{ pro.feb_2_q }}
+  Rate: {{ pro.feb_2_r }}">
+  {% if pro.feb_2_a != 0 %}{{ pro.feb_2_a|floatformat:0 }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  March-1
+  Qty: {{ pro.mar_1_q }}
+  Rate: {{ pro.mar_1_r }}">
+  {% if pro.mar_1_a != 0 %}{{ pro.mar_1_a|floatformat:0 }}{% endif %}</td>
+  <td title="{{ pro.subcategory.subcategory_name }}
+  March-2
+  Qty: {{ pro.mar_2_q }}
+  Rate: {{ pro.mar_2_r }}">
+  {% if pro.mar_2_a != 0 %}{{ pro.mar_2_a|floatformat:0 }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  April-1
+  Qty: {{ pro.apr_1_q }}
+  Rate: {{ pro.apr_1_r }}">
+  {% if pro.apr_1_a != 0 %}{{ pro.apr_1_a|floatformat:0 }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  April-2
+  Qty: {{ pro.apr_2_q }}
+  Rate: {{ pro.apr_2_r }}">
+  {% if pro.apr_2_a != 0 %}{{ pro.apr_2_a|floatformat:0 }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  May-1
+  Qty: {{ pro.may_1_q }}
+  Rate: {{ pro.may_1_r }}">
+  {% if pro.may_1_a != 0 %}{{ pro.may_1_a|floatformat:0 }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  May-2
+  Qty: {{ pro.may_2_q }}
+  Rate: {{ pro.may_2_r }}">
+  {% if pro.may_2_a != 0 %}{{ pro.may_2_a|floatformat:0 }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  June-1
+  Qty: {{ pro.jun_1_q }}
+  Rate: {{ pro.jun_1_r }}">
+  {% if pro.jun_1_a != 0 %}{{ pro.jun_1_a|floatformat:0 }}{% endif %}</td>
+  
+  <td title="{{ pro.subcategory.subcategory_name }}
+  June-2
+  Qty: {{ pro.jun_2_q }}
+  Rate: {{ pro.jun_2_r }}">
+  {% if pro.jun_2_a != 0 %}{{ pro.jun_2_a|floatformat:0 }}{% endif %}</td>
+  <td>{{pro.total|floatformat:0}}</td>
+    <td><a href="{% url 'delete_transaction' pro.pk %}" onclick="return confirm('Are you sure you want to delete all related transactions?');"><i class="material-icons" style="color:#1167b1">delete</i></a></td>
+                
+  </tr>
+{% endfor %}
+    <tr style="background-color: #50ba7eff">
+    <td>Total Income</td>
+    <td></td>
+    <td>{{ totals.total_jul_1_a|floatformat:0 }}</td>
+    <td>{{ totals.total_jul_2_a|floatformat:0 }}</td>
+    <td>{{ totals.total_aug_1_a|floatformat:0 }}</td>
+    <td>{{ totals.total_aug_2_a|floatformat:0 }}</td>
+    <td>{{ totals.total_sep_1_a|floatformat:0 }}</td>
+    <td>{{ totals.total_sep_2_a|floatformat:0 }}</td>
+    <td>{{ totals.total_oct_1_a|floatformat:0 }}</td>
+    <td>{{ totals.total_oct_2_a|floatformat:0 }}</td>
+    <td>{{ totals.total_nov_1_a|floatformat:0 }}</td>
+    <td>{{ totals.total_nov_2_a|floatformat:0 }}</td>
+    <td>{{ totals.total_dec_1_a|floatformat:0 }}</td>
+    <td>{{ totals.total_dec_2_a|floatformat:0 }}</td>
+    <td>{{ totals.total_jan_1_a|floatformat:0 }}</td>
+    <td>{{ totals.total_jan_2_a|floatformat:0 }}</td>
+    <td>{{ totals.total_feb_1_a|floatformat:0 }}</td>
+    <td>{{ totals.total_feb_2_a|floatformat:0 }}</td>
+    <td>{{ totals.total_mar_1_a|floatformat:0 }}</td>
+    <td>{{ totals.total_mar_2_a|floatformat:0 }}</td>
+    <td>{{ totals.total_apr_1_a|floatformat:0 }}</td>
+    <td>{{ totals.total_apr_2_a|floatformat:0 }}</td>
+    <td>{{ totals.total_may_1_a|floatformat:0 }}</td>
+    <td>{{ totals.total_may_2_a|floatformat:0 }}</td>
+    <td>{{ totals.total_jun_1_a|floatformat:0 }}</td>
+    <td>{{ totals.total_jun_2_a|floatformat:0 }}</td>
+    <td>{{ totals.total|floatformat:0 }}</td>
+    <td></td>
+    </tr>
+    

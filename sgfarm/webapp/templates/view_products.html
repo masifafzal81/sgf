@@ -452,167 +452,31 @@ a { color: inherit; }
                 
   </tr>
       {% endfor %}
-      <tr style="background-color: #cee199ff">
-        <td>Total Fertilizer</td>
-        <td></td>
-        <td>{{ totals_fertilizer.total_jul_1_a }}</td>
-      <td>{{ totals_fertilizer.total_jul_2_a }}</td>
-      <td>{{ totals_fertilizer.total_aug_1_a }}</td>
-      <td>{{ totals_fertilizer.total_aug_2_a }}</td>
-      <td>{{ totals_fertilizer.total_sep_1_a }}</td>
-      <td>{{ totals_fertilizer.total_sep_2_a }}</td>
-      <td>{{ totals_fertilizer.total_oct_1_a }}</td>
-      <td>{{ totals_fertilizer.total_oct_2_a }}</td>
-      <td>{{ totals_fertilizer.total_nov_1_a }}</td>
-      <td>{{ totals_fertilizer.total_nov_2_a }}</td>
-      <td>{{ totals_fertilizer.total_dec_1_a }}</td>
-      <td>{{ totals_fertilizer.total_dec_2_a }}</td>
-      <td>{{ totals_fertilizer.total_jan_1_a }}</td>
-      <td>{{ totals_fertilizer.total_jan_2_a }}</td>
-      <td>{{ totals_fertilizer.total_feb_1_a }}</td>
-      <td>{{ totals_fertilizer.total_feb_2_a }}</td>
-      <td>{{ totals_fertilizer.total_mar_1_a }}</td>
-      <td>{{ totals_fertilizer.total_mar_2_a }}</td>
-      <td>{{ totals_fertilizer.total_apr_1_a }}</td>
-      <td>{{ totals_fertilizer.total_apr_2_a }}</td>
-      <td>{{ totals_fertilizer.total_may_1_a }}</td>
-      <td>{{ totals_fertilizer.total_may_2_a }}</td>
-      <td>{{ totals_fertilizer.total_jun_1_a }}</td>
-      <td>{{ totals_fertilizer.total_jun_2_a }}</td>
-      <td>{{ totals_fertilizer.total }}</td>
-        <td></td>
-        
-      </tr>
+      
+      {% include 'product_components/fertilizer.html' %}
 
-      <tr style="background-color: #99c5e1ff">
-        <td>Total Tractor</td>
-        <td></td>
-        <td>{{ totals_tractor.total_jul_1_a }}</td>
-      <td>{{ totals_tractor.total_jul_2_a }}</td>
-      <td>{{ totals_tractor.total_aug_1_a }}</td>
-      <td>{{ totals_tractor.total_aug_2_a }}</td>
-      <td>{{ totals_tractor.total_sep_1_a }}</td>
-      <td>{{ totals_tractor.total_sep_2_a }}</td>
-      <td>{{ totals_tractor.total_oct_1_a }}</td>
-      <td>{{ totals_tractor.total_oct_2_a }}</td>
-      <td>{{ totals_tractor.total_nov_1_a }}</td>
-      <td>{{ totals_tractor.total_nov_2_a }}</td>
-      <td>{{ totals_tractor.total_dec_1_a }}</td>
-      <td>{{ totals_tractor.total_dec_2_a }}</td>
-      <td>{{ totals_tractor.total_jan_1_a }}</td>
-      <td>{{ totals_tractor.total_jan_2_a }}</td>
-      <td>{{ totals_tractor.total_feb_1_a }}</td>
-      <td>{{ totals_tractor.total_feb_2_a }}</td>
-      <td>{{ totals_tractor.total_mar_1_a }}</td>
-      <td>{{ totals_tractor.total_mar_2_a }}</td>
-      <td>{{ totals_tractor.total_apr_1_a }}</td>
-      <td>{{ totals_tractor.total_apr_2_a }}</td>
-      <td>{{ totals_tractor.total_may_1_a }}</td>
-      <td>{{ totals_tractor.total_may_2_a }}</td>
-      <td>{{ totals_tractor.total_jun_1_a }}</td>
-      <td>{{ totals_tractor.total_jun_2_a }}</td>
-      <td>{{ totals_tractor.total }}</td>
-        <td></td>
-        
-      </tr>
+      {% include 'product_components/tractor.html' %}
 
-      <tr style="background-color: #e1c399ff">
-        <td>Total Wages</td>
-        <td></td>
-        <td>{{ totals_wages.total_jul_1_a }}</td>
-      <td>{{ totals_wages.total_jul_2_a }}</td>
-      <td>{{ totals_wages.total_aug_1_a }}</td>
-      <td>{{ totals_wages.total_aug_2_a }}</td>
-      <td>{{ totals_wages.total_sep_1_a }}</td>
-      <td>{{ totals_wages.total_sep_2_a }}</td>
-      <td>{{ totals_wages.total_oct_1_a }}</td>
-      <td>{{ totals_wages.total_oct_2_a }}</td>
-      <td>{{ totals_wages.total_nov_1_a }}</td>
-      <td>{{ totals_wages.total_nov_2_a }}</td>
-      <td>{{ totals_wages.total_dec_1_a }}</td>
-      <td>{{ totals_wages.total_dec_2_a }}</td>
-      <td>{{ totals_wages.total_jan_1_a }}</td>
-      <td>{{ totals_wages.total_jan_2_a }}</td>
-      <td>{{ totals_wages.total_feb_1_a }}</td>
-      <td>{{ totals_wages.total_feb_2_a }}</td>
-      <td>{{ totals_wages.total_mar_1_a }}</td>
-      <td>{{ totals_wages.total_mar_2_a }}</td>
-      <td>{{ totals_wages.total_apr_1_a }}</td>
-      <td>{{ totals_wages.total_apr_2_a }}</td>
-      <td>{{ totals_wages.total_may_1_a }}</td>
-      <td>{{ totals_wages.total_may_2_a }}</td>
-      <td>{{ totals_wages.total_jun_1_a }}</td>
-      <td>{{ totals_wages.total_jun_2_a }}</td>
-      <td>{{ totals_wages.total }}</td>
-        <td></td>
-        
-      </tr>
+      {% include 'product_components/wages.html' %}
 
-      <tr style="background-color: #99e1e1ff">
-        <td>Total Electricity</td>
-        <td></td>
-        <td>{{ totals_electricity.total_jul_1_a }}</td>
-      <td>{{ totals_electricity.total_jul_2_a }}</td>
-      <td>{{ totals_electricity.total_aug_1_a }}</td>
-      <td>{{ totals_electricity.total_aug_2_a }}</td>
-      <td>{{ totals_electricity.total_sep_1_a }}</td>
-      <td>{{ totals_electricity.total_sep_2_a }}</td>
-      <td>{{ totals_electricity.total_oct_1_a }}</td>
-      <td>{{ totals_electricity.total_oct_2_a }}</td>
-      <td>{{ totals_electricity.total_nov_1_a }}</td>
-      <td>{{ totals_electricity.total_nov_2_a }}</td>
-      <td>{{ totals_electricity.total_dec_1_a }}</td>
-      <td>{{ totals_electricity.total_dec_2_a }}</td>
-      <td>{{ totals_electricity.total_jan_1_a }}</td>
-      <td>{{ totals_electricity.total_jan_2_a }}</td>
-      <td>{{ totals_electricity.total_feb_1_a }}</td>
-      <td>{{ totals_electricity.total_feb_2_a }}</td>
-      <td>{{ totals_electricity.total_mar_1_a }}</td>
-      <td>{{ totals_electricity.total_mar_2_a }}</td>
-      <td>{{ totals_electricity.total_apr_1_a }}</td>
-      <td>{{ totals_electricity.total_apr_2_a }}</td>
-      <td>{{ totals_electricity.total_may_1_a }}</td>
-      <td>{{ totals_electricity.total_may_2_a }}</td>
-      <td>{{ totals_electricity.total_jun_1_a }}</td>
-      <td>{{ totals_electricity.total_jun_2_a }}</td>
-      <td>{{ totals_electricity.total }}</td>
-        <td></td>
-        
-      </tr>
+      {% include 'product_components/electricity.html' %}
 
-      <tr style="background-color: #99e1e1ff">
-        <td>Total Tubewel</td>
-        <td></td>
-        <td>{{ totals_tubewel.total_jul_1_a }}</td>
-      <td>{{ totals_tubewel.total_jul_2_a }}</td>
-      <td>{{ totals_tubewel.total_aug_1_a }}</td>
-      <td>{{ totals_tubewel.total_aug_2_a }}</td>
-      <td>{{ totals_tubewel.total_sep_1_a }}</td>
-      <td>{{ totals_tubewel.total_sep_2_a }}</td>
-      <td>{{ totals_tubewel.total_oct_1_a }}</td>
-      <td>{{ totals_tubewel.total_oct_2_a }}</td>
-      <td>{{ totals_tubewel.total_nov_1_a }}</td>
-      <td>{{ totals_tubewel.total_nov_2_a }}</td>
-      <td>{{ totals_tubewel.total_dec_1_a }}</td>
-      <td>{{ totals_tubewel.total_dec_2_a }}</td>
-      <td>{{ totals_tubewel.total_jan_1_a }}</td>
-      <td>{{ totals_tubewel.total_jan_2_a }}</td>
-      <td>{{ totals_tubewel.total_feb_1_a }}</td>
-      <td>{{ totals_tubewel.total_feb_2_a }}</td>
-      <td>{{ totals_tubewel.total_mar_1_a }}</td>
-      <td>{{ totals_tubewel.total_mar_2_a }}</td>
-      <td>{{ totals_tubewel.total_apr_1_a }}</td>
-      <td>{{ totals_tubewel.total_apr_2_a }}</td>
-      <td>{{ totals_tubewel.total_may_1_a }}</td>
-      <td>{{ totals_tubewel.total_may_2_a }}</td>
-      <td>{{ totals_tubewel.total_jun_1_a }}</td>
-      <td>{{ totals_tubewel.total_jun_2_a }}</td>
-      <td>{{ totals_tubewel.total }}</td>
-        <td></td>
-        
-      </tr>
+      {% include 'product_components/tubewel.html' %}
 
-    
+      {% include 'product_components/spray.html' %}
+
+      {% include 'product_components/implements.html' %}
+
+      {% include 'product_components/construction.html' %}
+
+      {% include 'product_components/repair.html' %}
+
+      {% include 'product_components/developments.html' %}
+
+      {% include 'product_components/misc.html' %}
+
+      
+ 
 
       <tr style="background-color: #c499e1ff">
     <td>Total Expenditures</td>
@@ -652,4 +516,3 @@ a { color: inherit; }
 {% endif %}
 {% endif %}
 {% endblock %}
-
