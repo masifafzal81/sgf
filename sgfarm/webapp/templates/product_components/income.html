@@ -187,6 +187,7 @@
                 
   </tr>
 {% endfor %}
+    {% if totals_exists %}
     <tr style="background-color: #50ba7eff">
     <td>Total Income</td>
     <td></td>
@@ -217,4 +218,5 @@
     <td>{{ totals.total|floatformat:0 }}</td>
     <td></td>
     </tr>
+    {% endif %}
     

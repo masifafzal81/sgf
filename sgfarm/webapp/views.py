@@ -380,6 +380,25 @@ def view_products(request, year):
         # Replace None with 0 for totals2
         for key, value in totals2.items():
             totals2[key] = value or ''
+# --- Net Income Calculation ---
+        net_income = {}
+
+        for key in totals.keys():
+            income_val = totals.get(key) or 0
+            expense_val = totals2.get(key) or 0
+
+# Make sure values are numbers (replace '' with 0)
+        try:
+            income_val = float(income_val) if income_val != '' else 0
+        except:
+            income_val = 0
+
+        try:
+            expense_val = float(expense_val) if expense_val != '' else 0
+        except:
+            expense_val = 0
+
+        net_income[key] = income_val - expense_val
 
 # All Fertilizer Total
 
@@ -826,7 +845,7 @@ def view_products(request, year):
             'developments_exists':developments_exists,
             'totals_misc':totals_misc,
             'misc_exists':misc_exists,
-
+            'net_income':net_income,
             'selected_year': year,
             
         })
